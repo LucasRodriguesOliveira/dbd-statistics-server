@@ -10,6 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-RUN echo "PGPASS=${DATABASE_PASSWORD}"
-
 CMD [ "yarn", "start" ]
