@@ -2,7 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { TypeOrmConfig } from '../env/typeOrm.config';
 
-export const typeOrmModuleConfig: TypeOrmModuleAsyncOptions = {
+export const typeOrmModuleConfig = (entities): TypeOrmModuleAsyncOptions => ({
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) => {
     const { host, port, username, password, database } =
@@ -16,6 +16,7 @@ export const typeOrmModuleConfig: TypeOrmModuleAsyncOptions = {
       password,
       database,
       synchronize: true,
+      entities,
     };
   },
-};
+});

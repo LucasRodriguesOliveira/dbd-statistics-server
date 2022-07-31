@@ -15,6 +15,23 @@ services:
     ports:
       - "5432:5432"
     env_file: .env
+  e2e:
+    volumes:
+      - .:/usr/src/app
+    build:
+      dockerfile: ./e2e.Dockerfile
+    depends_on:
+      - db
+      - app
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_USER: "postgres"
+      DATABASE_PASSWORD: "admin"
+      DATABASE_HOST: "db"
+      DATABASE_PORT: "5432"
+      DATABASE_NAME: "postgres"
+      PORT: "3001"
 
 volumes:
   dbd_stats:
