@@ -84,14 +84,14 @@ describe('PerkTypeController', () => {
     const description = 'test';
 
     beforeEach(() => {
-      perkTypeRepository.create.mockReturnValueOnce(perkType);
+      perkTypeRepository.save.mockReturnValueOnce(perkType);
     });
 
     it('creates a Perk Type successfully', async () => {
       const result = await perkTypeController.create(description);
 
       expect(result).toBe(perkType);
-      expect(perkTypeRepository.create).toHaveBeenCalled();
+      expect(perkTypeRepository.save).toHaveBeenCalled();
     });
   });
 
@@ -124,7 +124,7 @@ describe('PerkTypeController', () => {
     const id = 0;
 
     beforeEach(() => {
-      perkTypeRepository.delete.mockReturnValueOnce(true);
+      perkTypeRepository.delete.mockReturnValueOnce({ raw: [], affected: 1 });
     });
 
     it("deletes successfully a perk type by it' id", async () => {
