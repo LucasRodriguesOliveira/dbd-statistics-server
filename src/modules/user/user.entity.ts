@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -26,14 +25,12 @@ export class User {
   @CreateDateColumn({
     type: 'timestamp',
     nullable: false,
-    default: 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     type: 'timestamp',
     nullable: false,
-    default: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 

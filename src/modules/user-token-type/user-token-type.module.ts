@@ -8,5 +8,6 @@ import { UserTokenTypeService } from './user-token-type.service';
   imports: [TypeOrmModule.forFeature([UserTokenType])],
   controllers: [UserTokenTypeController],
   providers: [UserTokenTypeService],
+  exports: [UserTokenTypeService],
 })
 export class UserTokenTypeModule {}

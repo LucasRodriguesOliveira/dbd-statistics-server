@@ -13,7 +13,7 @@ export class UserToken {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ type: 'varchar', length: 150, nullable: false })
+  @Column({ type: 'varchar', length: 150, nullable: false, unique: true })
   token: string;
 
   @Column({ type: 'timestamp', nullable: false })
