@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { PerkType } from './perk-type.entity';
+import { PerkType } from './enitites/perk-type.entity';
 import { PerkTypeService } from './perk-type.service';
 
 @Controller('perk-type')

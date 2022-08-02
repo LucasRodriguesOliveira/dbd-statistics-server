@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { PerkType } from './perk-type.entity';
+import { PerkType } from './enitites/perk-type.entity';
 
 @Injectable()
 export class PerkTypeService {

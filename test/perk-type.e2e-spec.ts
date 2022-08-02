@@ -6,7 +6,7 @@ import { envConfig } from '../src/config/env/env.config';
 import { TypeOrmPostgreSQLModule } from '../src/modules/typeorm/typeorm.module';
 import { PerkTypeModule } from '../src/modules/perk-type/perk-type.module';
 import { PerkTypeService } from '../src/modules/perk-type/perk-type.service';
-import { PerkType } from '../src/modules/perk-type/perk-type.entity';
+import { PerkType } from '../src/modules/perk-type/enitites/perk-type.entity';
 
 describe('PerkTypeController (e2e)', () => {
   let app: INestApplication;

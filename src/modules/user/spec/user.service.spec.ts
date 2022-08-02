@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MockType } from '../../../test/utils/mock-type';
-import { repositoryMockFactory } from '../../../test/utils/repository-mock.factory';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './user.entity';
-import { UserService } from './user.service';
+import { MockType } from '../../../../test/utils/mock-type';
+import { repositoryMockFactory } from '../../../../test/utils/repository-mock.factory';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
+import { User } from '../user.entity';
+import { UserService } from '../user.service';
 
 describe('UserService', () => {
   let userService: UserService;

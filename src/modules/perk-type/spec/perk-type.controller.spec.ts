@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MockType } from '../../../test/utils/mock-type';
-import { repositoryMockFactory } from '../../../test/utils/repository-mock.factory';
+import { MockType } from '../../../../test/utils/mock-type';
+import { repositoryMockFactory } from '../../../../test/utils/repository-mock.factory';
 import { Repository } from 'typeorm';
-import { PerkTypeController } from './perk-type.controller';
-import { PerkType } from './perk-type.entity';
-import { PerkTypeService } from './perk-type.service';
+import { PerkTypeController } from '../perk-type.controller';
+import { PerkType } from '../enitites/perk-type.entity';
+import { PerkTypeService } from '../perk-type.service';
 
 describe('PerkTypeController', () => {
   let perkTypeController: PerkTypeController;
