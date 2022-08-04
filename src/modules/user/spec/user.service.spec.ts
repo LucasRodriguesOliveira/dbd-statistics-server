@@ -5,7 +5,7 @@ import { MockType } from '../../../../test/utils/mock-type';
 import { repositoryMockFactory } from '../../../../test/utils/repository-mock.factory';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { User } from '../user.entity';
+import { User } from '../entities/user.entity';
 import { UserService } from '../user.service';
 
 describe('UserService', () => {

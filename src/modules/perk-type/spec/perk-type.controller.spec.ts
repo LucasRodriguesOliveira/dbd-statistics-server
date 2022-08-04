@@ -4,7 +4,7 @@ import { MockType } from '../../../../test/utils/mock-type';
 import { repositoryMockFactory } from '../../../../test/utils/repository-mock.factory';
 import { Repository } from 'typeorm';
 import { PerkTypeController } from '../perk-type.controller';
-import { PerkType } from '../enitites/perk-type.entity';
+import { PerkType } from '../entities/perk-type.entity';
 import { PerkTypeService } from '../perk-type.service';
 
 describe('PerkTypeController', () => {

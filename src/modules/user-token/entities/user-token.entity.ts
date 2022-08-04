@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../../modules/user/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { UserTokenType } from '../../../modules/user-token-type/entities/user-token-type.entity';
 
 @Entity()
@@ -19,11 +19,13 @@ export class UserToken {
   @Column({ type: 'timestamp', nullable: false })
   expiresAt: Date;
 
-  @ManyToOne(() => User, (user) => user.tokens)
+  @ManyToOne(() => User, (user) => user.tokens, { nullable: false })
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @ManyToOne(() => UserTokenType, (tokenType) => tokenType.tokens)
+  @ManyToOne(() => UserTokenType, (tokenType) => tokenType.tokens, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'tokenTypeId' })
   tokenType: UserTokenType;
 }

@@ -1,0 +1,412 @@
+Project DBD_Statistics {
+  database_type: 'PostgreSQL'
+  note: '''
+    # Statistics for DBD
+
+    A useful way to track info about dbd
+  '''
+}
+
+Table PerkType {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Aura reading, Generator regression, Heal speed, etc...'
+}
+
+Table Rarity {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Common, Rare, Very Rare, etc...'
+}
+
+Table Perk {
+  id          int           [pk, not null]
+  description varchar  (30) [not null]
+  typeId      smallint      [not null]
+  rarityId    smallint      [not null]
+}
+
+Table OfferingType {
+  id          smallint      [pk, not null]
+  description varchar  (50) [not null]
+
+  note: 'Bloodpoint, Map, Hatch Spawn, etc...'
+}
+
+Table Offering {
+  id          int          [pk, not null]
+  description varchar (30) [not null]
+  rarityId    smallint     [not null]
+  typeId      smallint     [not null]
+}
+
+Table ItemType {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Flashlight, Med kit, Toolbox, etc...'
+}
+
+Table ItemAddonType {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Speed, Duration, Consume slowdown, etc...'
+}
+
+Table ItemAddon {
+  id          int          [pk, not null]
+  description varchar (30) [not null]
+  rarityId    smallint     [not null]
+  typeId      smallint     [not null]
+}
+
+Table Item {
+  id          int          [pk, not null]
+  description varchar (30) [not null]
+  rarityId    smallint     [not null]
+  typeId      smallint     [not null]
+}
+
+Table Role {
+  id          smallint      [pk, not null]
+  description varchar  (20) [not null]
+
+  note: 'Killer or Survivor'
+}
+
+Table Character {
+  id           smallint      [pk, not null]
+  name         varchar  (50) [not null]
+  introducedAt datetime      [not null]
+  roleId       smallint      [not null]
+}
+
+Table ScoreCategoryMaxPoints {
+  id        smallint [pk, not null]
+  maxPoints int      [not null]
+
+  note: '''
+    Since last update, it shows that it is clear that they will eventually change the max points by category
+    To avoid few mistakes in analytics, instead of using brute value, i'll change to relative to max, so it still can be compared to old results
+  '''
+}
+
+Table ScoreCategory {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+  maxPointsId smallint      [not null]
+  isActive    bit           [not null, default: 1]
+
+  note: 'Brutality, Hunter, Objective, Survival, etc...'
+}
+
+Table GradeLevel {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Silver, Gold, etc...'
+}
+
+Table Grade {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Malicious, Devout, etc...'
+}
+
+Table Realm {
+  id   int          [pk, not null]
+  name varchar (30) [not null]
+}
+
+Table Map {
+  id      int          [pk, not null]
+  realmId int          [not null]
+  name    varchar (30) [not null]
+}
+
+Table Match {
+  id       int       [pk, not null]
+  gameDate timestamp [not null, default: 'CURRENT_TIMESTAMP']
+  mapId    int       [null]
+}
+
+Table UserTokenType {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+}
+
+Table UserType {
+  id          smallint      [pk, not null]
+  description varchar  (30) [not null]
+
+  note: 'Standard, Admin'
+}
+
+Table Module {
+  id          int          [pk, not null]
+  description varchar (30) [not null]
+
+  note: 'Match, Perk, Addon, etc...'
+}
+
+Table Permission {
+  id          int          [pk, not null]
+  description varchar (30) [not null]
+
+  note: 'List, Find, Create, Edit, Exclude'
+}
+
+Table PermissionGroup {
+  id           int [pk, not null]
+  typeId       int [not null]
+  permissionId int [not null]
+  moduleId     int [not null]
+
+  note: '''
+  # Example:
+
+  > John can do anything in Match module, but can only list in Platform module
+
+  <details>
+    <summary>User</summary>
+
+    | id | name | typeId |
+    | --- | --- | --- |
+    | 1 | John | 2 |
+
+  </details>
+
+  <details>
+    <summary>UserType</summary>
+
+    | id | description |
+    | --- | --- |
+    | 1 | Admin |
+    | 2 | Standard |
+
+  </details>
+
+  <details>
+    <summary>Module</summary>
+
+    | id | description |
+    | --- | --- |
+    | 1 | Match |
+    | 2 | Platform |
+
+  </details>
+
+  <details>
+    <summary>Permission</summary>
+
+    | id | description |
+    | --- | --- |
+    | 1 | List |
+    | 2 | Find |
+    | 3 | Create |
+    | 4 | Edit |
+    | 5 | Exclude |
+
+  </details>
+
+  <details>
+    <summary>PermissionGroup</summary>
+
+    | id | typeId | permissionId | moduleId |
+    | --- | --- | --- | --- |
+    | 1 | 2 | 1 | 1 |
+    | 1 | 2 | 2 | 1 |
+    | 1 | 2 | 3 | 1 |
+    | 1 | 2 | 4 | 1 |
+    | 1 | 2 | 5 | 1 |
+    | 1 | 2 | 1 | 2 |
+
+  </details>
+
+  ***
+  **Final result:**
+  ```javascript
+    const userPermissions = [
+      {
+        module: 'Match',
+        permissions: ['List', 'Find', 'Create', 'Edit', 'Exclude'],
+      }, {
+        module: 'Platform',
+        permissions: ['List'],
+      },
+    ];
+  ```
+  '''
+}
+
+Table User {
+  id        int           [pk, not null]
+  name      varchar (100) [not null]
+  email     varchar (100) [unique, not null]
+  password  varchar (100) [not null]
+  typeId    smallint      [not null]
+  createdAt timestamp     [not null, default: 'CURRENT_TIMESTAMP']
+  updatedAt timestamp     [not null, default: 'CURRENT_TIMESTAMP']
+}
+
+Table UserToken {
+  id          int             [pk, not null]
+  userId      int             [not null]
+  tokenTypeId smallint        [not null]
+  token       varchar   (150) [not null]
+  expiresAt   timestamp       [not null]
+} 
+
+Table Platform {
+  id   smallint      [pk, not null]
+  name varchar  (30) [not null]
+
+  note: 'Steam, Playstation, Xbox, etc...'
+}
+
+Table Player {
+  id         int          [pk, not null]
+  nickName   varchar (50) [not null]
+  platformId smallint     [not null]
+  isUser     bit          [not null, default: 0]
+}
+
+Table MatchPlayerResultType {
+  id          smallint     [pk, not null]
+  description varchar (30) [not null]
+
+  note: 'Escaped, Sacrificed, Dead, etc...'
+}
+
+Table MatchPlayerCharacter {
+  id           int      [pk, not null]
+  playerId     int      [not null]
+  matchId      int      [not null]
+  characterId  smallint [not null]
+  resultTypeId smallint [null]
+}
+
+Table MatchPlayerScorePerCategory {
+  id              int      [pk, not null]
+  playerId        int      [not null]
+  matchId         int      [not null]
+  scoreCategoryId smallint [not null]
+  score           int      [not null, default: 0]
+}
+
+Table MatchPlayerPerk {
+  id       int [pk, not null]
+  playerId int [not null]
+  matchId  int [not null]
+  perkId   int [null]
+}
+
+Table MatchPlayerOffering {
+  id         int [pk, not null]
+  playerId   int [not null]
+  matchId    int [not null]
+  offeringId int [not null]
+}
+
+Table MatchPlayerItem {
+  id       int [pk, not null]
+  playerId int [not null]
+  matchId  int [not null]
+  itemId   int [not null]
+}
+
+Table MatchPlayerItemAddon {
+  id          int [pk, not null]
+  playerId    int [not null]
+  matchId     int [not null]
+  itemAddonId int [not null]
+}
+
+Table MatchPlayerGrade {
+  id           int      [pk, not null]
+  playerId     int      [not null]
+  matchId      int      [not null]
+  gradeId      smallint [not null]
+  gradeLevelId smallint [not null]
+}
+
+// User
+Ref "User_UserType_fk": User.typeId > UserType.id
+
+// PermissionGroup
+Ref "PermissionGroup_UserType_fk": PermissionGroup.typeId > UserType.id
+Ref "PermissionGroup_Permission_fk": PermissionGroup.permissionId > Permission.id
+Ref "PermissionGroup_Module_fk": PermissionGroup.moduleId > Module.id
+
+// PERK
+Ref "Perk_PerkType_fk": Perk.typeId > PerkType.id
+Ref "Perk_Rarity_fk": Perk.rarityId > Rarity.id
+
+// OFFERING
+Ref "Offering_OfferingType_fk": Offering.typeId > OfferingType.id
+Ref "Offering_Rarity_fk": Offering.rarityId > Rarity.id
+
+//ITEMADDON
+Ref "ItemAddon_ItemAddonType_fk": ItemAddon.typeId > ItemAddonType.id
+Ref "ItemAddon_Rarity_fk": ItemAddon.rarityId > Rarity.id
+
+//ITEM
+Ref "Item_ItemType_fk": Item.typeId > ItemType.id
+Ref "Item_Rarity_fk": Item.rarityId > Rarity.id
+
+//CHARACTER
+Ref "Character_Role_fk": Character.roleId > Role.id
+
+//SCORECATEGORY
+Ref "ScoreCategory_ScoreCategoryMaxPoints_fk": ScoreCategory.maxPointsId > ScoreCategoryMaxPoints.id
+
+//MAP
+Ref "Map_Realm_fk": Map.realmId > Realm.id
+
+//MATCH
+Ref "Match_Map_fk": Match.mapId > Map.id
+
+//USERTOKEN
+Ref "UserToken_User_fk": UserToken.userId > User.id
+Ref "UserToken_UserTokenType_fk": UserToken.tokenTypeId > UserTokenType.id
+
+//MATCHPLAYERCHARACTER
+Ref "MatchPlayerCharacter_Player_fk": MatchPlayerCharacter.playerId > Player.id
+Ref "MatchPlayerCharacter_Match_fk": MatchPlayerCharacter.matchId > Match.id
+Ref "MatchPlayerCharacter_Character_fk": MatchPlayerCharacter.characterId > Character.id
+Ref "MatchPlayerCharacter_ResultType_fk": MatchPlayerCharacter.resultTypeId > MatchPlayerResultType.id
+
+//MATCHPLAYERSCOREPERCATEGORY
+Ref "MatchPlayerScorePerCategory_Player_fk": MatchPlayerScorePerCategory.playerId > Player.id
+Ref "MatchPlayerScorePerCategory_Match_fk": MatchPlayerScorePerCategory.matchId > Match.id
+Ref "MatchPlayerScorePerCategory_ScoreCategory_fk": MatchPlayerScorePerCategory.scoreCategoryId > ScoreCategory.id
+
+// MATCHPLAYERPERK
+Ref "MatchPlayerPerk_Player_fk": MatchPlayerPerk.playerId > Player.id
+Ref "MatchPlayerPerk_Match_fk": MatchPlayerPerk.matchId > Match.id
+Ref "MatchPlayerPerk_Perk_fk": MatchPlayerPerk.perkId > Perk.id
+
+// MATCHPLAYEROFFERING
+Ref "MatchPlayerOffering_Player_fk": MatchPlayerOffering.playerId > Player.id
+Ref "MatchPlayerOffering_Match_fk": MatchPlayerOffering.matchId > Match.id
+Ref "MatchPlayerOffering_Offerging_fk": MatchPlayerOffering.offeringId > Offering.id
+
+// MATCHPLAYERITEM
+Ref "MatchPlayerItem_Player_fk": MatchPlayerItem.playerId > Player.id
+Ref "MatchPlayerItem_Match_fk": MatchPlayerItem.matchId > Match.id
+Ref "MatchPlayerItem_Item_fk": MatchPlayerItem.itemId > Item.id
+
+// MATCHPLAYERITEMADDON
+Ref "MatchPlayerItemAddon_Player_fk": MatchPlayerItemAddon.playerId > Player.id
+Ref "MatchPlayerItemAddon_Match_fk": MatchPlayerItemAddon.matchId > Match.id
+Ref "MatchPlayerItemAddon_Item_fk": MatchPlayerItemAddon.itemAddonId > ItemAddon.id
+
+// MATCHPLAYERGRADE
+Ref "MatchPlayerGrade_Player_fk": MatchPlayerGrade.playerId > Player.id
+Ref "MatchPlayerGrade_Match_fk": MatchPlayerGrade.matchId > Match.id
+Ref "MatchPlayerGrade_Grade_fk": MatchPlayerGrade.gradeId > Grade.id
+Ref "MatchPlayerGradeLevel_GradeLevel_fk": MatchPlayerGrade.gradeLevelId > GradeLevel.id
